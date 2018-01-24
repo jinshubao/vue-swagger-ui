@@ -19,46 +19,54 @@
 import HeaderBar from './components/HeaderBar'
 import SideMenu from './components/SideMenu'
 import api from './api'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     HeaderBar, SideMenu
   },
   data () {
     return {
-      tags: []
     }
   },
   methods: {
+    ...mapActions({
+      addApiDocs: 'addApiDocs'
+    }),
     groupChange (value) {
-      this.loadDocs({group: value})
+      this.apiDocs({group: value})
     },
-    loadDocs (params) {
-      api.loadDocs(params).then(data => {
-        let tags = data.data.tags
-        let pathsObj = data.data.paths
-        tags.forEach((v, index, arr) => {
-          let paths = []
-          let tag = arr[index]
-          for (let path in pathsObj) {
-            let pathObj = pathsObj[path]
-            for (let method in pathObj) {
-              let methodObj = pathObj[method]
-              if (methodObj['tags'].includes(tag.name)) {
-                let object = Object.assign({}, methodObj)
-                object['path'] = path
-                object['method'] = method
-                paths.push(object)
+    apiDocs (params) {
+      api.apiDocs(params).then(res => {
+        if (res.data) {
+          let data = Object.assign({}, res.data)
+          let tags = data.tags
+          let pathsObj = data.paths
+          tags.forEach((v, index, arr) => {
+            let paths = []
+            let tag = arr[index]
+            for (let path in pathsObj) {
+              let pathObj = pathsObj[path]
+              for (let method in pathObj) {
+                let methodObj = Object.assign({}, pathObj[method])
+                if (methodObj['tags'].includes(tag.name)) {
+                  methodObj['path'] = path
+                  methodObj['method'] = method
+                  paths.push(methodObj)
+                }
               }
             }
-          }
-          tag['paths'] = paths
-        })
-        this.tags = tags
+            tag['operations'] = paths
+          })
+          data.paths = {}
+          this.addApiDocs(data)
+        }
       })
-    },
-    handPath (api, method, path) {
-
     }
+  },
+  computed: {
+    ...mapGetters({
+      tags: 'tags'
+    })
   },
   mounted () {
 

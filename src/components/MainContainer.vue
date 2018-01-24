@@ -23,9 +23,9 @@ export default {
     }
   },
   methods: {
-    loadDocs () {
+    apiDocs () {
       let params = {}
-      api.loadDocs(params).then(data => {
+      api.apiDocs(params).then(data => {
         // TODO
       })
     }

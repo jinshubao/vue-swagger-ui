@@ -1,23 +1,29 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <h3>title</h3>
+      <p>{{operation}}</p>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: '接口详情',
   props: {
-    operation: Array
   },
   data () {
     return {
-      active: '0'
     }
   },
   methods: {
+
+  },
+  computed: {
+    ...mapGetters({
+      operation: 'operation'
+    })
+  },
+  created () {
   },
   mounted () {
   }

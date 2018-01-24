@@ -22,11 +22,9 @@ export default {
     }
   },
   methods: {
-    loadGroups () {
-      console.log('loadGroups')
-      api.loadGroups().then(data => {
+    resources () {
+      api.resources().then(data => {
         this.groups = data.data
-        console.log('data', data)
       })
     },
     change (value) {
@@ -34,7 +32,7 @@ export default {
     }
   },
   mounted () {
-    this.loadGroups()
+    this.resources()
   }
 }
 </script>

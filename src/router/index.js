@@ -1,10 +1,17 @@
-import OperationDetail from '../components/OperationDetail'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+import Operation from '../components/Operation'
+
+Vue.use(VueRouter)
 
 let routes = [
   {
     path: '/operation/:operationId',
-    name: '接口详情',
-    component: OperationDetail
+    name: 'operation',
+    component: Operation
   },
   {
     path: '/error',
@@ -14,5 +21,15 @@ let routes = [
     children: []
   }
 ]
+const router = new VueRouter({routes})
 
-export default routes
+router.beforeEach((to, from, next) => {
+  nprogress.start()
+  next()
+})
+
+router.afterEach(transition => {
+  nprogress.done()
+})
+
+export default router
