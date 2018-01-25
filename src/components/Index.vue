@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <section>
+    swagger文档
+  </section>
 </template>
 
 <script>

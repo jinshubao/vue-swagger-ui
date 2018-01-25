@@ -1,13 +1,13 @@
 import * as types from '../mutation-types'
 
-// initial state
 const state = {
+  apiHost: '',
   apiDocs: {},
   operation: {}
 }
 
-// getters
 const getters = {
+  apiHost: (state) => state.apiHost,
   operation: (state) => state.operation,
   apiDocs: (state) => state.apiDocs,
   tags: (state) => {
@@ -15,13 +15,14 @@ const getters = {
   }
 }
 
-// actions
 const actions = {
 
 }
 
-// mutations
 const mutations = {
+  [types.ADD_API_HOST] (state, host) {
+    state.apiHost = host
+  },
   [types.ADD_API_DOCS] (state, apiDocs) {
     state.apiDocs = apiDocs
   },

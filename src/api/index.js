@@ -9,6 +9,7 @@ export default {
   securityConfiguration: () => {
     return axios.get('/swagger-resources/configuration/security', {params: {}})
   },
+
   uiConfiguration: () => {
     return axios.get('/swagger-resources/configuration/ui', {params: {}})
   },
