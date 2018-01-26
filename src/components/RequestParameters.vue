@@ -55,6 +55,17 @@
     <div v-if="bodyParameters.length > 0">
       <h5>Body参数</h5>
       <pre v-for="param in bodyParameters" :key="param.name">{{format(param)}}</pre>
+      <el-table
+        :data="headerAndQueryParameters"
+        border
+        stripe
+        style="width: 100%">
+        <el-table-column
+          prop="name"
+          label="参数名"
+          width="120">
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -62,6 +73,7 @@
 <script>
 
 import { formatObject } from '../util'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     parameters: Array,
@@ -72,6 +84,9 @@ export default {
     }
   },
   methods: {
+    ...mapGetters({
+      getDefinition: 'getDefinition'
+    }),
     format (obj) {
       return formatObject(obj)
     }
@@ -88,7 +103,22 @@ export default {
     bodyParameters: {
       get () {
         if (this.parameters) {
-          return this.parameters.filter(param => param.in === 'body')
+          let params = this.parameters.filter(param => param.in === 'body')
+          params.forEach((p, i, arr) => {
+            let param = arr[i]
+            if (param) {
+              let schema = param['schema']
+              if (schema) {
+                let ref = schema['$ref']
+                if (ref) {
+                  ref = ref.replace('#/definitions/', '')
+                  // TODO 这里不能修改
+                  schema['$ref'] = this.getDefinition(ref)
+                }
+              }
+            }
+          })
+          return params
         }
         return []
       }

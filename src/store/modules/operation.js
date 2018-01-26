@@ -31,7 +31,8 @@ const getters = {
       return state.apiDocs['info']
     }
     return {}
-  }
+  },
+  getDefinition: (state) => (ref) => state.apiDocs['definitions'][ref]
 }
 
 const actions = {

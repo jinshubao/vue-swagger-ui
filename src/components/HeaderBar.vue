@@ -54,25 +54,61 @@ export default {
       apiDocs(params).then(res => {
         if (res.data) {
           let data = res.data
-          let tags = data.tags
-          let pathsObj = data.paths
-          tags.forEach((v, index, arr) => {
-            let paths = []
-            let tag = arr[index]
-            forEachValue(pathsObj, (pathObj, path) => {
-              forEachValue(pathObj, (methodObj, key) => {
-                if (methodObj['tags'].includes(tag.name)) {
-                  methodObj['path'] = path
-                  methodObj['method'] = key
-                  paths.push(methodObj)
-                }
-              })
-            })
-            tag['operations'] = paths
-          })
-          data.paths = {}
+          data = this.handlePath(data)
+          let definitions = this.handleDefinitionsRef(data['definitions'])
+          data['definitions'] = definitions
           this.addApiDocs(data)
           this.$router.push({name: 'groupIndex', query: params})
+        }
+      })
+    },
+    handlePath (data) {
+      let tags = data.tags
+      let pathsObj = data.paths
+      tags.forEach((v, index, arr) => {
+        let paths = []
+        let tag = arr[index]
+        forEachValue(pathsObj, (pathObj, path) => {
+          forEachValue(pathObj, (methodObj, key) => {
+            if (methodObj['tags'].includes(tag.name)) {
+              methodObj['path'] = path
+              methodObj['method'] = key
+              paths.push(methodObj)
+            }
+          })
+        })
+        tag['operations'] = paths
+      })
+      data.paths = {}
+      return data
+    },
+    handleDefinitionsRef (definitions) {
+      let definition = {}
+      forEachValue(definitions, (value, key) => {
+        this.handleDefinition(definitions, value)
+        definition[key] = value
+      })
+      return definition
+    },
+    handleDefinition (definitions, definition) {
+      let properties = definition['properties']
+      forEachValue(properties, (property, key) => {
+        if (property['type'] === 'array') {
+          let ref = property['items']['$ref']
+          if (ref && (typeof ref === 'string')) {
+            ref = ref.replace('#/definitions/', '')
+            let reference = definitions[ref]
+            this.handleDefinition(definitions, reference)
+            property['items']['$ref'] = reference
+          }
+        } else {
+          let ref = property['$ref']
+          if (ref && (typeof ref === 'string')) {
+            ref = ref.replace('#/definitions/', '')
+            let reference = definitions[ref]
+            this.handleDefinition(definitions, reference)
+            property['$ref'] = reference
+          }
         }
       })
     }
