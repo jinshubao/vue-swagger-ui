@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="200px">
+    <el-aside width="300px">
       <side-menu></side-menu>
     </el-aside>
     <el-container>
@@ -12,8 +12,7 @@
 </template>
 
 <script>
-import SideMenu from './SideMenu'
-import api from '../api'
+import SideMenu from '../SideMenu'
 export default {
   components: {
     SideMenu
@@ -23,14 +22,16 @@ export default {
     }
   },
   methods: {
-    apiDocs () {
-      let params = {}
-      api.apiDocs(params).then(data => {
-        // TODO
-      })
-    }
+  },
+  computed: {
   },
   mounted () {
   }
 }
 </script>
+<style>
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+  }
+</style>

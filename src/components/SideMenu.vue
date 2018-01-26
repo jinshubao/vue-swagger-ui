@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="active" @select="handleSelect">
+  <el-menu @select="handleSelect">
     <el-submenu v-for="item in tags" :key="item.name" :index="item.name">
       <template slot="title">
         <i class="el-icon-menu"></i>
@@ -14,14 +14,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   props: {
-    tags: Array
   },
   data () {
     return {
-      active: '0'
     }
   },
   methods: {
@@ -29,21 +27,17 @@ export default {
       addOperation: 'addOperation'
     }),
     handleSelect (index, indexPath) {
-      let params = null
-      this.tags.forEach((v, tindex, arr) => {
-        let tag = arr[tindex]
-        tag.operations.forEach((pv, pindex, paths) => {
-          let path = paths[pindex]
-          if (path.operationId === index) {
-            params = Object.assign({}, path)
-          }
-        })
-      })
-      if (params) {
-        this.addOperation(params)
-        this.$router.push({name: 'operation', params: params})
-      }
+      let param = Object.assign({}, this.$route.query)
+      param['operationId'] = index
+      this.$router.push({name: 'operation', query: param})
     }
+  },
+  computed: {
+    ...mapGetters({
+      tags: 'tags'
+    })
+  },
+  created () {
   },
   mounted () {
   }

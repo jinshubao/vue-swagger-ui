@@ -64,3 +64,14 @@ export function isPromise (val) {
 export function assert (condition, msg) {
   if (!condition) throw new Error(`[vuex] ${msg}`)
 }
+
+export function toJson (obj) {
+  return JSON.stringify(obj)
+}
+
+export function formatObject (object) {
+  if (!object) {
+    return null
+  }
+  return JSON.stringify(object, null, '\t')
+}

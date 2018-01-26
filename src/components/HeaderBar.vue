@@ -1,18 +1,18 @@
 <template>
   <el-row>
-    <el-col :span="4">
+    <el-col :span="5">
       <img class="header-logo" src="../assets/logo.png">
     </el-col>
-    <el-col :span="7">
-      <h3 class="header-title">接口文档</h3>
+    <el-col :span="15" style="text-align: center;">
+      <h1 class="header-title">接口文档</h1>
     </el-col>
-    <el-col :span="5">
+<!--    <el-col :span="5">
       <el-input placeholder="请输入域名/IP" v-model="apiHost">
         <template slot="prepend">Http://</template>
         <el-button slot="append" icon="el-icon-search" @click="searchBtnClick"></el-button>
       </el-input>
-    </el-col>
-    <el-col :span="4">
+    </el-col>-->
+    <el-col :span="4" style="text-align: right;">
       <el-select v-model="group" placeholder="请选择" @change="change">
         <el-option
           v-for="item in groups"
@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      addApiHost: 'addApiHost'
+      addApiDocs: 'addApiDocs'
     }),
     resources () {
       api.resources().then(data => {
@@ -47,22 +47,41 @@ export default {
       })
     },
     change (value) {
-      this.$emit('groupChange', value)
+      this.apiDocs({group: value})
+      this.$router.push({name: 'groupIndex', query: {group: value}})
     },
-    searchBtnClick () {
-      // this.addApiHost(this.apiHost)
-      this.resources()
+    apiDocs (params) {
+      api.apiDocs(params).then(res => {
+        if (res.data) {
+          let data = Object.assign({}, res.data)
+          let tags = data.tags
+          let pathsObj = data.paths
+          tags.forEach((v, index, arr) => {
+            let paths = []
+            let tag = arr[index]
+            for (let path in pathsObj) {
+              let pathObj = pathsObj[path]
+              for (let method in pathObj) {
+                let methodObj = Object.assign({}, pathObj[method])
+                if (methodObj['tags'].includes(tag.name)) {
+                  methodObj['path'] = path
+                  methodObj['method'] = method
+                  paths.push(methodObj)
+                }
+              }
+            }
+            tag['operations'] = paths
+          })
+          data.paths = {}
+          this.addApiDocs(data)
+        }
+      })
     }
   },
   computed: {
-    apiHost: {
-      set (value) {
-        localStorage.lastname = value
-      },
-      get () {
-        return localStorage.lastname
-      }
-    }
+  },
+  created () {
+    this.resources()
   },
   mounted () {
   }
