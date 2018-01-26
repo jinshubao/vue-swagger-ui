@@ -25,6 +25,12 @@ const getters = {
   apiDocs: (state) => state.apiDocs,
   tags: (state) => {
     return state.apiDocs['tags']
+  },
+  getInfo: (state) => {
+    if (state.apiDocs) {
+      return state.apiDocs['info']
+    }
+    return {}
   }
 }
 

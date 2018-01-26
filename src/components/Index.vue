@@ -4,9 +4,9 @@
       <h3>title</h3>
     </div>
     <div>
-      <h3>security</h3>
+      <h5>安全设置</h5>
       <p>{{security}}</p>
-      <h3>ui config</h3>
+      <h5>界面设置</h5>
       <p>{{ui}}</p>
     </div>
   </el-card>
