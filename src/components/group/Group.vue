@@ -34,4 +34,8 @@ export default {
     background-color: #E9EEF3;
     color: #333;
   }
+  .el-aside {
+    background-color: #E9EEF3;
+    /*background-color: #545c64;*/
+  }
 </style>

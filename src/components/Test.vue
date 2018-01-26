@@ -22,8 +22,7 @@
                       :prop="'queryParam.' + param.name"
                       :rules="{
                               required: param.required, message: param.description +'必填', trigger: 'blur, change'
-                      }"
-        >
+                      }">
           <el-input :value="param.default"></el-input>
         </el-form-item>
       </section>
@@ -36,18 +35,19 @@
         </el-form-item>
       </section>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">去吧</el-button>
+        <el-button type="primary" @click="onSubmit">测一测</el-button>
       </el-form-item>
     </el-form>
-    <p>{{testResult}}</p>
+    <p>{{format(testResult)}}</p>
   </section>
 </template>
 
 <script>
 import { formatObject } from '../util'
+import { test } from '../api'
 export default {
   props: {
-    parameters: Array
+    operation: Object
   },
 
   data () {
@@ -55,13 +55,17 @@ export default {
       headerParam: {},
       queryParam: {},
       bodyParam: {},
-      testResult: ''
+      testResult: {}
     }
   },
   methods: {
     onSubmit () {
-      console.log('submit!===')
-      this.testResult = {test: 'test'}
+      console.log('headerParam', this.headerParam)
+      console.log('queryParam', this.queryParam)
+      console.log('bodyParam', this.bodyParam)
+      test(this.operation.method, this.operation.path, {}).then(data => {
+        this.testResult = data.data
+      })
     },
 
     format (obj) {
@@ -71,24 +75,24 @@ export default {
   computed: {
     headerParameters: {
       get () {
-        if (this.parameters) {
-          return this.parameters.filter(param => param.in === 'header')
+        if (this.operation && this.operation['parameters']) {
+          return this.operation.parameters.filter(param => param.in === 'header')
         }
         return []
       }
     },
     queryParameters: {
       get () {
-        if (this.parameters) {
-          return this.parameters.filter(param => param.in === 'query')
+        if (this.operation && this.operation.parameters) {
+          return this.operation.parameters.filter(param => param.in === 'query')
         }
         return []
       }
     },
     bodyParameters: {
       get () {
-        if (this.parameters) {
-          return this.parameters.filter(param => param.in === 'body')
+        if (this.operation && this.operation.parameters) {
+          return this.operation.parameters.filter(param => param.in === 'body')
         }
         return []
       }

@@ -1,13 +1,13 @@
 <template>
   <el-menu @select="handleSelect">
-    <el-submenu v-for="item in tags" :key="item.name" :index="item.name">
+    <el-submenu v-for="item in getTags" :key="item.name" :index="item.name">
       <template slot="title">
         <i class="el-icon-menu"></i>
         <span>{{item.description}}</span>
       </template>
-      <el-menu-item v-for="path in item.operations" :index="path.operationId" :key="path.operationId">
-        <i class="el-icon-info"></i>
-        <span slot="title">{{path.summary}}</span>
+      <el-menu-item v-for="operation in item.operations" :index="operation.operationId" :key="operation.operationId">
+        <i v-bind:class="[{'el-icon-location': operation.method === 'post'}, {'el-icon-info': operation.method === 'get'}]"></i>
+        <span slot="title">{{operation.summary}}</span>
       </el-menu-item>
     </el-submenu>
   </el-menu>
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tags: 'tags'
+      getTags: 'tags'
     })
   },
   created () {
@@ -44,14 +44,4 @@ export default {
 }
 </script>
 <style>
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-  }
-  .el-aside .el-submenu__title * {
-    vertical-align: middle;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 </style>

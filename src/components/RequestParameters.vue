@@ -54,7 +54,7 @@
     </div>
     <div v-if="bodyParameters.length > 0">
       <h5>Body参数</h5>
-      <pre>{{format(bodyParameters)}}</pre>
+      <pre v-for="param in bodyParameters" :key="param.name">{{format(param)}}</pre>
     </div>
   </div>
 </template>

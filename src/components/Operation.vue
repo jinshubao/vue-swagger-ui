@@ -6,12 +6,12 @@
     </div>
     <div>
       <h3>Path</h3>
-      <Method :method="operation.method">
+      <Method :method="upperCase(operation.method)">
         <span>{{operation.path}}</span>
       </Method>
       <request-parameter :parameters="parameters" :consumes="operation.consumes"></request-parameter>
       <response-parameter :parameters="responses" :produces="operation.produces"></response-parameter>
-      <test :parameters="operation.parameters"></test>
+      <test :operation="operation"></test>
     </div>
   </el-card>
 </template>
@@ -37,6 +37,12 @@ export default {
   methods: {
     format (obj) {
       return formatObject(obj)
+    },
+    upperCase (method) {
+      if (method) {
+        return method.toUpperCase()
+      }
+      return ''
     },
     getOperation () {
       return this.$store.getters.getOperation(this.$route.query['operationId'])

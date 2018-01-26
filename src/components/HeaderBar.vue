@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import api from '../api'
+import { apiDocs, resources } from '../api'
 import { mapActions } from 'vuex'
 export default {
   props: {
@@ -41,19 +41,18 @@ export default {
     ...mapActions({
       addApiDocs: 'addApiDocs'
     }),
-    resources () {
-      api.resources().then(data => {
+    getResources () {
+      resources().then(data => {
         this.groups = data.data
       })
     },
     change (value) {
-      this.apiDocs({group: value})
-      this.$router.push({name: 'groupIndex', query: {group: value}})
+      this.getApiDocs({group: value})
     },
-    apiDocs (params) {
-      api.apiDocs(params).then(res => {
+    getApiDocs (params) {
+      apiDocs(params).then(res => {
         if (res.data) {
-          let data = Object.assign({}, res.data)
+          let data = res.data
           let tags = data.tags
           let pathsObj = data.paths
           tags.forEach((v, index, arr) => {
@@ -74,6 +73,7 @@ export default {
           })
           data.paths = {}
           this.addApiDocs(data)
+          this.$router.push({name: 'groupIndex', query: params})
         }
       })
     }
@@ -81,7 +81,7 @@ export default {
   computed: {
   },
   created () {
-    this.resources()
+    this.getResources()
   },
   mounted () {
   }
