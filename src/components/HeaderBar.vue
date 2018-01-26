@@ -28,6 +28,7 @@
 <script>
 import { apiDocs, resources } from '../api'
 import { mapActions } from 'vuex'
+import { forEachValue } from '../util'
 export default {
   props: {
   },
@@ -58,17 +59,15 @@ export default {
           tags.forEach((v, index, arr) => {
             let paths = []
             let tag = arr[index]
-            for (let path in pathsObj) {
-              let pathObj = pathsObj[path]
-              for (let method in pathObj) {
-                let methodObj = Object.assign({}, pathObj[method])
+            forEachValue(pathsObj, (pathObj, path) => {
+              forEachValue(pathObj, (methodObj, key) => {
                 if (methodObj['tags'].includes(tag.name)) {
                   methodObj['path'] = path
-                  methodObj['method'] = method
+                  methodObj['method'] = key
                   paths.push(methodObj)
                 }
-              }
-            }
+              })
+            })
             tag['operations'] = paths
           })
           data.paths = {}

@@ -21,7 +21,7 @@ import Method from './RequestMethod'
 import RequestParameter from './RequestParameters'
 import ResponseParameter from './ResponseParameter'
 import Test from './Test'
-import { formatObject } from '../util'
+import { formatObject, forEachValue } from '../util'
 export default {
   components: {
     ResponseParameter, RequestParameter, Method, Test
@@ -70,12 +70,11 @@ export default {
         if (operation && operation.responses) {
           let responses = operation.responses
           if (responses) {
-            for (let key in responses) {
-              let value = responses[key]
+            forEachValue(responses, (value, key) => {
               let obj = Object.assign({}, value)
               obj['status'] = key
               arr.push(obj)
-            }
+            })
           }
         }
         return arr
