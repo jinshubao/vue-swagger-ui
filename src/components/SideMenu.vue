@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   props: {
   },
@@ -23,9 +23,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      addOperation: 'addOperation'
-    }),
     handleSelect (index, indexPath) {
       let param = Object.assign({}, this.$route.query)
       param['operationId'] = index
