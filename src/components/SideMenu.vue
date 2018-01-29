@@ -1,5 +1,5 @@
 <template>
-  <el-menu @select="handleSelect">
+  <el-menu @select="handleSelect" class="side-menu">
     <el-submenu v-for="item in getTags" :key="item.name" :index="item.name">
       <template slot="title">
         <i class="el-icon-menu"></i>
@@ -41,4 +41,7 @@ export default {
 }
 </script>
 <style>
+  .side-menu {
+    overflow-y: auto;
+  }
 </style>

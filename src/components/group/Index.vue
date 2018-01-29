@@ -5,7 +5,9 @@
       <p>{{info.description}}</p>
     </div>
     <div>
-      <h5>版本：{{info.version}}</h5>
+      <h5>域名：{{host}}</h5>
+      <h5>基础路径：{{basePath}}</h5>
+      <h5>版本号：{{info.version}}</h5>
       <h5>联系人：<a :href="info.contact.url">{{info.contact.name}}</a></h5>
       <h5>许可证：<a :href="info.license.url">{{info.license.name}}</a></h5>
     </div>
@@ -24,7 +26,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      info: 'getInfo'
+      info: 'getInfo',
+      basePath: 'getBasePath',
+      host: 'getHost'
     })
   },
   created () {

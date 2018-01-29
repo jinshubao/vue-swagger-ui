@@ -6,12 +6,6 @@
     <el-col :span="15" style="text-align: center;">
       <h1 class="header-title">接口文档</h1>
     </el-col>
-<!--    <el-col :span="5">
-      <el-input placeholder="请输入域名/IP" v-model="apiHost">
-        <template slot="prepend">Http://</template>
-        <el-button slot="append" icon="el-icon-search" @click="searchBtnClick"></el-button>
-      </el-input>
-    </el-col>-->
     <el-col :span="4" style="text-align: right;">
       <el-select v-model="group" placeholder="请选择" @change="change">
         <el-option
@@ -55,8 +49,8 @@ export default {
         if (res.data) {
           let data = res.data
           data = this.handlePath(data)
-          let definitions = this.handleDefinitionsRef(data['definitions'])
-          data['definitions'] = definitions
+          this.handleTags(data['tags'], data['definitions'])
+          data['definitions'] = this.handleDefinitionsRef(data['definitions'])
           this.addApiDocs(data)
           this.$router.push({name: 'groupIndex', query: params})
         }
@@ -111,6 +105,40 @@ export default {
           }
         }
       })
+    },
+    handleTags (tags, definitions) {
+      for (let index in tags) {
+        let tag = tags[index]
+        let operations = tag['operations']
+        if (operations) {
+          for (let i in operations) {
+            let operation = operations[i]
+            let parameters = operation['parameters']
+            this.handleParameters(parameters, definitions)
+          }
+        }
+      }
+    },
+    handleParameters (parameters, definitions) {
+      for (let index in parameters) {
+        let param = parameters[index]
+        let schema = param['schema']
+        if (schema) {
+          if (schema['type'] === 'array') {
+            let ref = schema['items']['$ref']
+            if (ref && (typeof ref === 'string')) {
+              ref = ref.replace('#/definitions/', '')
+              schema['items']['$ref'] = definitions[ref]
+            }
+          } else {
+            let ref = schema['$ref']
+            if (ref && (typeof ref === 'string')) {
+              ref = ref.replace('#/definitions/', '')
+              schema['$ref'] = definitions[ref]
+            }
+          }
+        }
+      }
     }
   },
   computed: {

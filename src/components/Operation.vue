@@ -1,30 +1,30 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="operation-card">
     <div slot="header" class="clearfix">
       <h3>{{operation.summary}}</h3>
       <p>{{operation.description}}</p>
     </div>
     <div>
-      <h3>Path</h3>
-      <Method :method="upperCase(operation.method)">
-        <span>{{operation.path}}</span>
-      </Method>
+      <request-path :method="operation.method" :path="operation.path"></request-path>
       <request-parameter :parameters="parameters" :consumes="operation.consumes"></request-parameter>
       <response-parameter :parameters="responses" :produces="operation.produces"></response-parameter>
       <test :operation="operation"></test>
+      <definition v-for="(definition, key) in definitions" :definition="definition" :name="key" :key="key"></definition>
     </div>
   </el-card>
 </template>
 
 <script>
-import Method from './RequestMethod'
+import RequestPath from './RequestPath'
 import RequestParameter from './RequestParameters'
 import ResponseParameter from './ResponseParameter'
+import Definition from './Definition'
 import Test from './Test'
 import { formatObject, forEachValue } from '../util'
+import { mapGetters } from 'vuex'
 export default {
   components: {
-    ResponseParameter, RequestParameter, Method, Test
+    ResponseParameter, RequestParameter, Test, Definition, RequestPath
   },
   props: {
   },
@@ -49,6 +49,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      definitions: 'getDefinitions'
+    }),
     operation: {
       get () {
         return this.getOperation()

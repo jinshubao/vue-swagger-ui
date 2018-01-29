@@ -32,7 +32,10 @@ const getters = {
     }
     return {}
   },
-  getDefinition: (state) => (ref) => state.apiDocs['definitions'][ref]
+  getHost: (state) => state.apiDocs['host'],
+  getBasePath: (state) => state.apiDocs['basePath'],
+  getDefinition: (state) => (ref) => state.apiDocs['definitions'][ref],
+  getDefinitions: (state) => state.apiDocs['definitions']
 }
 
 const actions = {

@@ -1,71 +1,62 @@
 <template>
-  <div class="parameters">
+  <div>
     <h3>参数</h3>
-    <h5>Consumes</h5>
-    <p>[ {{consumes ? consumes.join(', ') : ''}} ]</p>
-    <div v-if="headerAndQueryParameters.length > 0">
-      <h5>Header/Query参数</h5>
-      <el-table
-        :data="headerAndQueryParameters"
-        border
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="name"
-          label="参数名"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          label="类型"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="in"
-          label="参数位置"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="required"
-          label="是否必填"
-          width="100">
-          <template slot-scope="scope">
-            {{ scope.row.required? '是' : '否' }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="default"
-          label="默认值"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="enum"
-          label="可选值"
-          width="180">
-          <template slot-scope="scope">
-            {{scope.row.enum ? scope.row.enum.join(', ') : ''}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="description"
-          label="描述">
-        </el-table-column>
-      </el-table>
-    </div>
-    <div v-if="bodyParameters.length > 0">
-      <h5>Body参数</h5>
-      <pre v-for="param in bodyParameters" :key="param.name">{{format(param)}}</pre>
-      <el-table
-        :data="headerAndQueryParameters"
-        border
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="name"
-          label="参数名"
-          width="120">
-        </el-table-column>
-      </el-table>
+    <div>
+      <h5>Consumes</h5>
+      <p>[ {{consumes ? consumes.join(', ') : ''}} ]</p>
+      <div v-if="headerAndQueryParameters.length > 0">
+        <h5>Header/Query参数</h5>
+        <el-table
+          :data="headerAndQueryParameters"
+          border
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="参数名"
+            width="120">
+            <template slot-scope="scope">
+              <strong>{{ scope.row.name}}</strong>
+              <br/>
+              <em>{{ scope.row.required? '（必填）' : '（可选）' }}</em>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="type"
+            label="类型"
+            width="120">
+            <template slot-scope="scope">
+              {{ scope.row.type}}<em v-if="scope.row.format">({{scope.row.format}})</em>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="in"
+            label="参数位置"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="default"
+            label="默认值"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="enum"
+            label="可选值"
+            width="180">
+            <template slot-scope="scope">
+              {{scope.row.enum ? scope.row.enum.join(', ') : ''}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="description"
+            label="描述">
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-if="bodyParameters.length > 0">
+        <h5>Body参数</h5>
+        <pre v-for="param in bodyParameters" :key="param.name">{{format(param.schema.$ref)}}</pre>
+      </div>
     </div>
   </div>
 </template>
@@ -104,20 +95,6 @@ export default {
       get () {
         if (this.parameters) {
           let params = this.parameters.filter(param => param.in === 'body')
-          params.forEach((p, i, arr) => {
-            let param = arr[i]
-            if (param) {
-              let schema = param['schema']
-              if (schema) {
-                let ref = schema['$ref']
-                if (ref) {
-                  ref = ref.replace('#/definitions/', '')
-                  // TODO 这里不能修改
-                  schema['$ref'] = this.getDefinition(ref)
-                }
-              }
-            }
-          })
           return params
         }
         return []

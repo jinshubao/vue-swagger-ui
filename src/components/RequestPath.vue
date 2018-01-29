@@ -1,20 +1,31 @@
 <template>
-  <section>
-    <el-tag :type="type">{{method}}</el-tag>
-    <slot></slot>
-  </section>
+  <div>
+    <h3>Path</h3>
+    <div>
+      <el-tag :type="type">{{upperCase(method)}}</el-tag>
+      <span>{{path}}</span>
+    </div>
+  </div>
 </template>
 
 <script>
+
 export default {
   props: {
-    method: String
+    method: String,
+    path: String
   },
   data () {
     return {
     }
   },
   methods: {
+    upperCase (method) {
+      if (method) {
+        return method.toUpperCase()
+      }
+      return ''
+    }
   },
   computed: {
     type: {
