@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-    <div slot="header" class="clearfix">
+    <div slot="header">
       <h3>{{info.title}}</h3>
       <p>{{info.description}}</p>
     </div>

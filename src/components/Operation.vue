@@ -9,7 +9,7 @@
       <request-parameter :parameters="parameters" :consumes="operation.consumes"></request-parameter>
       <response-parameter :parameters="responses" :produces="operation.produces"></response-parameter>
       <test :operation="operation"></test>
-      <definition v-for="(definition, key) in definitions" :definition="definition" :name="key" :key="key"></definition>
+      <!--<definition v-for="(definition, key) in definitions" :definition="definition" :name="key" :key="key"></definition>-->
     </div>
   </el-card>
 </template>
@@ -18,13 +18,17 @@
 import RequestPath from './RequestPath'
 import RequestParameter from './RequestParameters'
 import ResponseParameter from './ResponseParameter'
-import Definition from './Definition'
+// import Definition from './Definition'
 import Test from './Test'
 import { formatObject, forEachValue } from '../util'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    ResponseParameter, RequestParameter, Test, Definition, RequestPath
+    RequestPath,
+    RequestParameter,
+    ResponseParameter,
+    Test
+    // Definition
   },
   props: {
   },
