@@ -1,6 +1,6 @@
 <template>
-  <el-card class="operation-card">
-    <div slot="header" class="clearfix">
+  <el-card>
+    <div slot="header">
       <h3>{{operation.summary}}</h3>
       <p>{{operation.description}}</p>
     </div>

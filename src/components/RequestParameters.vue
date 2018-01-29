@@ -12,6 +12,11 @@
           stripe
           style="width: 100%">
           <el-table-column
+            prop="in"
+            label="参数位置"
+            width="100">
+          </el-table-column>
+          <el-table-column
             prop="name"
             label="参数名"
             width="120">
@@ -28,11 +33,6 @@
             <template slot-scope="scope">
               {{ scope.row.type}}<em v-if="scope.row.format">({{scope.row.format}})</em>
             </template>
-          </el-table-column>
-          <el-table-column
-            prop="in"
-            label="参数位置"
-            width="100">
           </el-table-column>
           <el-table-column
             prop="default"
