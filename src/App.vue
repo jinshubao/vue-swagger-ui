@@ -9,7 +9,7 @@
         <side-menu></side-menu>
         </el-scrollbar>
       </div>
-      <div  class="app-main" >
+      <div class="app-main" >
         <el-scrollbar style="height:100%">
           <router-view :key="key"></router-view>
         </el-scrollbar>
@@ -57,8 +57,12 @@ export default {
   }
   .app-main {
     position: fixed;
-    margin-left: 300px;
-    height: 100%;
     width: 100%;
+    top: 70px;
+    left: 252px;
+    /* height: 100%; */
+    bottom: 0;
+    right: 10px;
+    overflow: hidden;
   }
 </style>

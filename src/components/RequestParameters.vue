@@ -24,12 +24,12 @@
           <el-table-column
             prop="name"
             label="参数名"
-            width="120">
+            width="150">
             <template slot-scope="scope">
               <strong v-if="scope.row.required">{{ scope.row.name}}</strong>
               {{ scope.row.required?'':scope.row.name}}
               <br/>
-              <em>{{ scope.row.required? '（必填）' : '（可选）' }}</em>
+              <em>({{ scope.row.required? '必填' : '可选' }})</em>
             </template>
           </el-table-column>
           <el-table-column
@@ -94,7 +94,8 @@ export default {
       get () {
         if (this.parameters) {
           return this.parameters.filter(param => param.in === 'header' || param.in === 'query').sort((a, b) => {
-            return a.in === 'header' ? 0 : 1
+            // header优先展示，required优先展示
+            return a.in === b.in ? (a.required ? 0 : 1) : (a.in === 'header' ? 0 : 1)
           })
         }
         return []

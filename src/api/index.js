@@ -16,10 +16,12 @@ export const apiDocs = (params) => {
   return axios.get('/v2/api-docs', {params: params})
 }
 
-export const test = (method, url, params) => {
+export const test = (method, url, header, params, data) => {
   return axios({
     method: method,
     url: url,
-    data: params
+    headers: header || {},
+    params: params || {},
+    data: data || {}
   })
 }
