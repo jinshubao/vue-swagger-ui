@@ -15,13 +15,19 @@
             prop="in"
             label="参数位置"
             width="100">
+            <template slot-scope="scope">
+              <el-tag
+                :type="scope.row.in === 'header' ? 'danger' : 'primary'"
+                disable-transitions>{{scope.row.in}}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="name"
             label="参数名"
             width="120">
             <template slot-scope="scope">
-              <strong>{{ scope.row.name}}</strong>
+              <strong v-if="scope.row.required">{{ scope.row.name}}</strong>
+              {{ scope.row.required?'':scope.row.name}}
               <br/>
               <em>{{ scope.row.required? '（必填）' : '（可选）' }}</em>
             </template>
@@ -31,7 +37,8 @@
             label="类型"
             width="120">
             <template slot-scope="scope">
-              {{ scope.row.type}}<em v-if="scope.row.format">({{scope.row.format}})</em>
+              {{scope.row.type}}
+              <em v-if="scope.row.format">({{scope.row.format}})</em>
             </template>
           </el-table-column>
           <el-table-column
@@ -86,7 +93,9 @@ export default {
     headerAndQueryParameters: {
       get () {
         if (this.parameters) {
-          return this.parameters.filter(param => param.in === 'header' || param.in === 'query')
+          return this.parameters.filter(param => param.in === 'header' || param.in === 'query').sort((a, b) => {
+            return a.in === 'header' ? 0 : 1
+          })
         }
         return []
       }
@@ -94,8 +103,7 @@ export default {
     bodyParameters: {
       get () {
         if (this.parameters) {
-          let params = this.parameters.filter(param => param.in === 'body')
-          return params
+          return this.parameters.filter(param => param.in === 'body')
         }
         return []
       }

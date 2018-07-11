@@ -52,7 +52,7 @@ export default {
           this.handleTags(data['tags'], data['definitions'])
           data['definitions'] = this.handleDefinitionsRef(data['definitions'])
           this.addApiDocs(data)
-          this.$router.push({name: 'groupIndex', query: params})
+          this.$router.push({name: 'group', query: params})
         }
       })
     },
@@ -160,10 +160,7 @@ export default {
   .el-header {
     background-color: #89bf04;
     color: #333;
-    /*text-align: center;*/
     line-height: 60px;
   }
-  .el-header .el-row .el-col {
-    height: 60px;
-  }
+
 </style>

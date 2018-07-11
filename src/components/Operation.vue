@@ -18,7 +18,6 @@
 import RequestPath from './RequestPath'
 import RequestParameter from './RequestParameters'
 import ResponseParameter from './ResponseParameter'
-// import Definition from './Definition'
 import Test from './Test'
 import { formatObject, forEachValue } from '../util'
 import { mapGetters } from 'vuex'

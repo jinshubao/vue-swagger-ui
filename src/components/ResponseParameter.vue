@@ -6,7 +6,7 @@
       <p>[ {{produces ? produces.join(', ') : ''}} ]</p>
       <div v-for="param in parameters" :key="param.description">
         <h5>Status {{param.status}} : {{param.description}}</h5>
-        <pre>{{format(param)}}</pre>
+        <pre>{{format(getRefObject(param))}}</pre>
       </div>
     </div>
   </div>
@@ -14,6 +14,7 @@
 
 <script>
 import { formatObject } from '../util'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     parameters: Array,
@@ -24,8 +25,18 @@ export default {
     }
   },
   methods: {
+    ...mapGetters({
+      getDefinition: 'getDefinition',
+      getDefinitions: 'getDefinitions'
+    }),
     format (obj) {
       return formatObject(obj)
+    },
+    getRefObject (param) {
+      let ref = param.schema['$ref']
+      ref = ref.substring(14, ref.length)
+      let definition = this.getDefinitions()
+      return definition[ref]['properties']
     }
   },
   computed: {

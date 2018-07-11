@@ -62,9 +62,9 @@ export default {
   },
   methods: {
     onSubmit () {
-      console.log('headerParam', this.headerParam)
-      console.log('queryParam', this.queryParam)
-      console.log('bodyParam', this.bodyParam)
+      // console.log('headerParam', this.headerParam)
+      // console.log('queryParam', this.queryParam)
+      // console.log('bodyParam', this.bodyParam)
       test(this.operation.method, this.operation.path, {}).then(data => {
         this.testResult = data.data
       })

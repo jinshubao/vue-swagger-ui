@@ -5,8 +5,7 @@ import 'nprogress/nprogress.css'
 
 import Operation from '../components/Operation'
 import Index from '../components/Index'
-import Group from '../components/group/Group'
-import GroupIndex from '../components/group/Index'
+import Group from '../components/Group'
 
 Vue.use(VueRouter)
 
@@ -20,18 +19,16 @@ let routes = [
   },
   {
     path: '/group',
+    name: 'group',
     component: Group,
     children: [
-      {
-        path: '',
-        name: 'groupIndex',
-        component: GroupIndex
-      },
-      {
-        path: 'operation',
-        name: 'operation',
-        component: Operation
-      }
+    ]
+  },
+  {
+    path: '/operation',
+    name: 'operation',
+    component: Operation,
+    children: [
     ]
   },
   {
